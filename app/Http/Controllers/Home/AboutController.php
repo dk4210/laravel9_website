@@ -11,14 +11,14 @@ use Illuminate\Http\RedirectResponse;
 
 class AboutController extends Controller
 {
-    public function aBoutPage() {
+    public function ABoutPage() {
         $about = About::find(1);
 
         return view('admin.about_page.about_page_all', compact('about'));
 
     }
 
-    public function store(Request $request)
+    public function Store(Request $request)
     {
         $about_id = $request->id;
 
@@ -56,4 +56,10 @@ class AboutController extends Controller
 
         } // End else
     } // End Method
+
+    public function HomeAbout() {
+        $aboutpage = About::find(1);
+        return view('frontend.about_page', compact('aboutpage'));
+
+    }// End Method
 }
