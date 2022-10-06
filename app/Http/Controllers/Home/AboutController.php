@@ -127,4 +127,19 @@ class AboutController extends Controller
         }
 
     }// End Method
+
+    public function DeleteMultiImage($id) {
+         $multi = MultiImage::findOrFail($id);
+         $img = $multi->multi_image;
+         unlink($img); // remove it from the upload folder
+         MultiImage::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Image Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.multi.image')->with($notification);
+
+    } // End Method
 }
