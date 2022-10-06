@@ -7,6 +7,7 @@ use App\Models\HomeSlide;
 use Illuminate\Http\Request;
 use App\Models\Portfolio;
 use Image;
+use Illuminate\Support\Carbon;
 
 class PortfolioController extends Controller
 {
@@ -19,7 +20,7 @@ class PortfolioController extends Controller
     {
         $portfolio = Portfolio::latest()->get();
         return view('admin.portfolio.portfolio_all', compact('portfolio'));
-    }// End Method
+    } // End Method
 
     /**
      * Show the form for creating a new resource.
@@ -28,7 +29,7 @@ class PortfolioController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.portfolio.portfolio_add');
     }
 
     /**
@@ -39,8 +40,37 @@ class PortfolioController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name'       => 'required',
+            'title'      => 'required',
+            'image'      => 'required',
+            'description' => 'required',
+
+        ],[
+            'name.required' => 'Portfolio name is required',
+            'title.required' => 'Portfolio title is required'
+
+        ]);
+
+        $image = $request->file('image');
+        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+        Image::make($image)->resize(1020, 519)->save('upload/portfolio/' . $name_gen);
+        $save_url = 'upload/portfolio/' . $name_gen;
+        Portfolio::insert([
+            'name' => $request->name,
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $save_url,
+            'created_at' => Carbon::now()
+        ]);
+
+        $notification = array(
+            'message' => 'Portfolio added Successfully',
+            'alert-type' => 'info'
+        );
+        return redirect()->route('all.portfolio')->with($notification);
+
+    } // End method
 
     /**
      * Display the specified resource.
@@ -61,7 +91,8 @@ class PortfolioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+        return view('admin.portfolio.portfolio_edit', compact('portfolio'));
     }
 
     /**
@@ -71,10 +102,41 @@ class PortfolioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
-    }
+            $portfolio_id = $request->id;
+            if($request->file('image')) {
+            $image = $request->file('image');
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            Image::make($image)->resize(1020, 519)->save('upload/portfolio/' . $name_gen);
+            $save_url = 'upload/portfolio/' . $name_gen;
+            Portfolio::findOrFail($portfolio_id)->update([
+                'name' => $request->name,
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $save_url,
+            ]);
+
+            $notification = array(
+                'message' => 'Portfolio Updated With Image Successfully',
+                'alert-type' => 'info'
+            );
+            return redirect()->route('all.portfolio')->with($notification);
+            }else{
+                Portfolio::findOrFail($portfolio_id)->update([
+                'name' => $request->name,
+                'title' => $request->title,
+                'description' => $request->description,
+            ]);
+
+            $notification = array(
+                'message' => 'Portfolio Updated Without Image Successfully',
+                'alert-type' => 'info'
+            );
+            return redirect()->route('all.portfolio')->with($notification);
+
+        } // End else
+    } // End method
 
     /**
      * Remove the specified resource from storage.

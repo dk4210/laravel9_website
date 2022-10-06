@@ -57,7 +57,10 @@ Route::controller(AboutController::class)->group(function() {
 // Portfolio All Routes
 Route::controller(PortfolioController::class)->group(function() {
     Route::get('all/portfolio', 'index')->name('all.portfolio');
-    // Route::post('update/slider', 'store')->name('update.slider');
+    Route::get('add/portfolio', 'create')->name('add.portfolio');
+    Route::post('store/portfolio', 'store')->name('store.portfolio');
+    Route::get('edit/portfolio/{id}', 'edit')->name('edit.portfolio');
+    Route::post('update/portfolio', 'update')->name('update.portfolio');
 });
 
 
