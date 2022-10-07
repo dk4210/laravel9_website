@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Models\HomeSlide;
+use App\Models\MultiImage;
 use Illuminate\Http\Request;
 use App\Models\Portfolio;
 use Image;
@@ -146,6 +147,21 @@ class PortfolioController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $portfolio = Portfolio::findOrFail($id);
+        $img = $portfolio->image;
+        unlink($img); // remove it from the upload folder
+        Portfolio::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Portfolio Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    } // End Method
+
+    public function portfolioDetails($id) {
+        $portfolio = Portfolio::findOrFail($id);
+        return view('frontend.portfolio_details', compact('portfolio'));
+    } // End Method
 }
