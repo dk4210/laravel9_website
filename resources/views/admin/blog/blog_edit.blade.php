@@ -13,30 +13,27 @@
 
     <div class="page-content">
         <div class="container-fluid">
-            <h4 class="card-title">Add Blog Page</h4>
+            <h4 class="card-title">Edit Blog Page</h4>
             <form method="POST" action="{{ route('store.blog') }}" enctype="multipart/form-data">
                 @csrf
-
+                <input type="hidden" name="id" value="{{$blogs->id}}">
                 <div class="row mb-3">
                     <label for="example-text-input" class="col-sm-2 col-form-label">Blog Category</label>
                     <div class="col-sm-10">
-                                    <select name="category_id" class="form-select" aria-label="Default select example">
-                                    <option selected="">Choose</option>
-                                        @foreach($categories as $cat)
-                                        <option value="{{$cat->id}}">{{$cat->blog_category}}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <!-- end row -->
+                        <select name="category_id" class="form-select" aria-label="Default select example">
+                            <option selected="">Choose</option>
+                            @foreach($categories as $cat)
+                                <option value="{{$cat->id}}" {{ $cat->id == $blogs->category_id ? 'selected' : '' }}>{{$cat->blog_category}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <!-- end row -->
 
                 <div class="row mb-3">
                     <label for="example-text-input" class="col-sm-2 col-form-label">Blog title</label>
                     <div class="col-sm-10">
-                        <input name="title" class="form-control" id="title" type="text">
-                        @error('title')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <input name="title" value="{{ $blogs->title }}" class="form-control" id="title" type="text">
                     </div>
                 </div>
                 <!-- end row -->
@@ -44,7 +41,7 @@
                 <div class="row mb-3">
                     <label for="example-text-input" class="col-sm-2 col-form-label">Blog Tags</label>
                     <div class="col-sm-10">
-                        <input name="tags" class="form-control" value="home,tech" type="text" data-role="tagsinput">
+                        <input name="tags" class="form-control" value="{{ $blogs->tags }}" type="text" data-role="tagsinput">
                         @error('tags')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -55,7 +52,7 @@
                 <div class="row mb-3">
                     <label for="example-text-input" class="col-sm-2 col-form-label">Blog Description </label>
                     <div class="col-sm-10">
-                        <textarea id="elm1" name="description"></textarea>
+                        <textarea id="elm1" name="description">{{ $blogs->description }}</textarea>
                     </div>
                 </div>
 
@@ -69,13 +66,13 @@
                 <div class="row mb-3">
                     <label for="example-text-input" class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">
-                        <img id="showImage" class="rounded avatar-lg" src="{{ url('upload/no-image.jpg') }}" alt="Card image cap">
+                        <img id="showImage" class="rounded avatar-lg" src="{{ asset($blogs->image) }}" alt="Card image cap">
                     </div>
                 </div>
                 <!-- end row -->
 
 
-                <input type="submit" class="btn btn-info waves-effect waves-light" value="Add Blog">
+                <input type="submit" class="btn btn-info waves-effect waves-light" value="Update Blog">
         </div>
     </div>
 
