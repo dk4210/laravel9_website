@@ -95,8 +95,40 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+
+        if($request->file('image')) {
+            $image = $request->file('image');
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            Image::make($image)->resize(1020, 519)->save('upload/blog/' . $name_gen);
+            $save_url = 'upload/blog/' . $name_gen;
+            Blog::findOrFail($id)->update([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'tags' => $request->tags,
+                'image' => $save_url,
+            ]);
+
+            $notification = array(
+                'message' => 'Blog Updated With Image Successfully',
+                'alert-type' => 'info'
+            );
+            return redirect()->route('all.blog')->with($notification);
+        }else {
+            Blog::findOrFail($id)->update([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'tags' => $request->tags,
+            ]);
+
+            $notification = array(
+                'message' => 'Blog Updated Without Image Successfully',
+                'alert-type' => 'success'
+            );
+        }
+        return redirect()->route('all.blog')->with($notification);
+    } // End Method
 
     /**
      * Remove the specified resource from storage.
@@ -106,6 +138,16 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $blog = Blog::findOrFail($id);
+        $img = $blog->image;
+        unlink($img); // remove it from the upload folder
+        Blog::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Blog Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
 }

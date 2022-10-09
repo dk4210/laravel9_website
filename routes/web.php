@@ -85,8 +85,8 @@ Route::controller(BlogController::class)->group(function() {
       Route::get('add/blog', 'create')->name('add.blog');
       Route::post('store/blog', 'store')->name('store.blog');
       Route::get('edit/blog/{id}', 'edit')->name('edit.blog');
-//    Route::post('update/blog/category/{id}', 'update')->name('update.blog.category');
-//    Route::get('delete/blog/category/{id}', 'destroy')->name('delete.blog.category');
+      Route::post('update/blog/{id}', 'update')->name('update.blog');
+      Route::get('delete/blog//{id}', 'destroy')->name('delete.blog');
 });
 
 
