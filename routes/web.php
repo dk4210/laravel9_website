@@ -87,10 +87,10 @@ Route::controller(BlogController::class)->group(function() {
       Route::get('edit/blog/{id}', 'edit')->name('edit.blog');
       Route::post('update/blog/{id}', 'update')->name('update.blog');
       Route::get('delete/blog//{id}', 'destroy')->name('delete.blog');
+      Route::get('blog/details/{id}', 'blogDetails')->name('blog.details');
+      Route::get('category/blog/{id}', 'categoryBlog')->name('category.blog');
+      Route::get('blog', 'homeBlog')->name('home.blog');
 });
-
-
-
 
 
 require __DIR__.'/auth.php';
