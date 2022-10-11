@@ -1,6 +1,10 @@
 @extends('frontend.main_master')
 @section('main')
 
+    @section('title')
+        Home | About
+    @endsection
+
 <main>
     <!-- breadcrumb-area -->
     <section class="breadcrumb__wrap">

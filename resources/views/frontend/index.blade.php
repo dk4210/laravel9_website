@@ -1,5 +1,10 @@
 @extends('frontend.main_master')
 @section('main')
+
+    @section('title')
+    Home | Dan Kelly
+    @endsection
+
 <main>
 
     <!-- banner-area -->
