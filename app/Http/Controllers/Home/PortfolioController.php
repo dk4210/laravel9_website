@@ -23,6 +23,14 @@ class PortfolioController extends Controller
         return view('admin.portfolio.portfolio_all', compact('portfolio'));
     } // End Method
 
+    public function homeportfolio()
+    {
+        $portfolio = Portfolio::latest()->get();
+        return view('frontend.portfolio', compact('portfolio'));
+    } // End Method
+
+
+
     /**
      * Show the form for creating a new resource.
      *
