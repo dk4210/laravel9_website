@@ -15,9 +15,7 @@ class AboutController extends Controller
 {
     public function ABoutPage() {
         $about = About::find(1);
-
         return view('admin.about_page.about_page_all', compact('about'));
-
     }
 
     public function Store(Request $request)
